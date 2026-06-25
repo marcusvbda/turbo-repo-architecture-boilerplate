@@ -1,1 +1,22 @@
-.claude/settings.local.json
+# deps
+node_modules
+
+# builds
+.next
+dist
+.expo
+
+# turbo
+.turbo
+
+# env
+.env
+.env.local
+.env.*.local
+
+# supabase local
+supabase/.branches
+supabase/.temp
+
+# OS
+.DS_Store
