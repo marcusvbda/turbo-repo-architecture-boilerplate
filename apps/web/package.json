@@ -16,14 +16,17 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.0.0",
     "@repo/eslint-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
+    "@tailwindcss/postcss": "^4.3.1",
     "@types/node": "^20.0.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
-    "@eslint/eslintrc": "^3.0.0",
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.0.0",
+    "sass": "^1.101.0",
+    "tailwindcss": "^4.3.1",
     "typescript": "^5.0.0"
   }
 }
