@@ -1,1 +1,1 @@
-export type * from './supabase'
+// shared types go here

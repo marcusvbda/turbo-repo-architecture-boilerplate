@@ -14,9 +14,8 @@ dist
 .env.local
 .env.*.local
 
-# supabase local
-supabase/.branches
-supabase/.temp
-
 # OS
 .DS_Store
+
+# claude
+docs

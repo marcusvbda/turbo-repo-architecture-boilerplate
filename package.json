@@ -2,13 +2,10 @@
   "name": "@repo/root",
   "private": true,
   "scripts": {
-    "dev": "supabase start && turbo dev",
+    "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
-    "typecheck": "turbo typecheck",
-    "db:reset": "supabase db reset",
-    "db:types": "supabase gen types typescript --local > packages/types/src/supabase.ts",
-    "db:migrate": "supabase migration new"
+    "typecheck": "turbo typecheck"
   },
   "devDependencies": {
     "turbo": "^2.0.0"
