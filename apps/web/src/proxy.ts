@@ -3,9 +3,10 @@ import type { NextRequest } from 'next/server'
 import { getMe, refreshToken } from './services/auth'
 
 const redirectToLogin = (req: NextRequest) => {
+  const callbackUrl = req.nextUrl.pathname
   const url = req.nextUrl.clone()
-  url.pathname = `/auth/signin`
-  url.searchParams.set('callbackUrl', encodeURIComponent(url.pathname))
+  url.pathname = '/auth/signin'
+  url.searchParams.set('callbackUrl', callbackUrl)
   return NextResponse.redirect(url)
 }
 
@@ -17,6 +18,13 @@ const clearSession = (req: NextRequest) => {
 
 export default async function proxy(req: NextRequest) {
   const sessionKey = process.env.SESSION_KEY!
+
+  if (req.nextUrl.pathname.startsWith('/auth')) {
+    const res = NextResponse.next()
+    res.cookies.delete(sessionKey)
+    return res
+  }
+
   const session = req.cookies.get(sessionKey)?.value
 
   if (!session) return redirectToLogin(req)
@@ -36,9 +44,8 @@ export default async function proxy(req: NextRequest) {
     }
 
     const user = await meRes.json()
-
     const nextRes = NextResponse.next()
-    nextRes.headers.set(`x-${sessionKey}`, JSON.stringify(user))
+    nextRes.headers.set(`x-${sessionKey}`, JSON.stringify({ user, token: access_token }))
 
     if (refreshed) {
       nextRes.cookies.set(sessionKey, JSON.stringify({ access_token }), {
@@ -56,5 +63,5 @@ export default async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|auth|_next|.well-known|_vercel|images|favicon).*)'],
+  matcher: ['/((?!api/auth/login|static|_next|.well-known|_vercel|images|favicon).*)'],
 }

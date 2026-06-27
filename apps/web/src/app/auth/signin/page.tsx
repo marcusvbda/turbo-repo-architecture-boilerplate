@@ -1,27 +1,13 @@
-import Card from '../../../components/ui/card'
-import Tag from '../../../components/ui/tag'
+import LoginForm from '@/components/auth/loginForm'
 
-export default function LoginPage() {
+type Props = { searchParams: Promise<{ callbackUrl?: string }> }
+
+export default async function LoginPage({ searchParams }: Props) {
+  const { callbackUrl = '/' } = await searchParams
+
   return (
-    <main>
-      <h1 className="text-3xl">
-        Login <span className="text-accent">Page</span>
-      </h1>
-      <p className="text-muted">
-        Roadmap detalhado do MVP —
-        <span className="text-muted/50">3h/dia nos dias úteis ~15h/semana.</span> Organizado por
-        sprint com tasks, critérios de aceite e expectativas claras.
-      </p>
-
-      <Card className="flex flex-col gap-2 m-4">
-        <div className="flex gap-2">
-          <Tag>default</Tag>
-          <Tag type="success">success</Tag>
-          <Tag type="error">error</Tag>
-          <Tag type="warning">warning</Tag>
-        </div>
-        <div>abc</div>
-      </Card>
-    </main>
+    <section className="flex self-center max-w-xl mx-auto py-20">
+      <LoginForm callbackUrl={callbackUrl} />
+    </section>
   )
 }
