@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { login } from '@/services/auth'
+import Link from 'next/link'
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -34,7 +35,7 @@ export default function LoginForm({ callbackUrl }: IProps) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: login,
-    onSuccess: (res) => {
+    onSuccess: (res: any) => {
       if (!res.ok) return toast.error(res.message ?? 'Invalid credentials')
       startTransition(() => {
         router.push(callbackUrl)
@@ -86,6 +87,15 @@ export default function LoginForm({ callbackUrl }: IProps) {
           {isPending ? 'Signing in…' : isRedirecting ? 'Redirecting…' : 'Sign in'}
         </button>
       </form>
+
+      <div className="flex justify-between text-sm text-muted">
+        <Link href="/auth/register" className="text-accent">
+          Create account
+        </Link>
+        <Link href="/auth/forgot-password" className="text-accent">
+          Forgot password?
+        </Link>
+      </div>
     </Card>
   )
 }

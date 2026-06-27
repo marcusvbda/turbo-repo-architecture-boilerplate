@@ -23,6 +23,18 @@ export class User {
   @Column({ nullable: true, type: 'timestamptz' })
   verifiedAt!: Date | null
 
+  @Column({ nullable: true, type: 'text' })
+  emailConfirmToken!: string | null
+
+  @Column({ nullable: true, type: 'timestamptz' })
+  emailConfirmTokenExpiry!: Date | null
+
+  @Column({ nullable: true, type: 'text' })
+  resetPasswordToken!: string | null
+
+  @Column({ nullable: true, type: 'timestamptz' })
+  resetPasswordTokenExpiry!: Date | null
+
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt!: Date
 

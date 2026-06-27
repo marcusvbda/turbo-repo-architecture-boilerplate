@@ -63,5 +63,5 @@ export default async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api/auth/login|static|_next|.well-known|_vercel|images|favicon).*)'],
+  matcher: ['/((?!api/auth|static|_next|.well-known|_vercel|images|favicon).*)'],
 }

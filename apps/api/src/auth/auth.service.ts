@@ -1,6 +1,7 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common'
+import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { randomBytes, scryptSync, timingSafeEqual } from 'crypto'
+import { EmailService } from '../email/email.service'
 import { User } from '../users/user.entity'
 import { UsersService } from '../users/users.service'
 
@@ -9,6 +10,7 @@ export class AuthService {
   constructor(
     private readonly users: UsersService,
     private readonly jwt: JwtService,
+    private readonly email: EmailService,
   ) {}
 
   async register(username: string, email: string, password: string) {
@@ -16,8 +18,63 @@ export class AuthService {
     if (existing) throw new ConflictException('Email already in use')
     const hashed = this.hashPassword(password)
     const user = await this.users.create({ username, email, password: hashed })
-    const { password: _, ...safe } = user
-    return safe
+
+    const token = randomBytes(32).toString('hex')
+    const expiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
+    await this.users.setEmailConfirmToken(user.id, token, expiry)
+
+    const url = `${process.env.APP_URL}/auth/confirm-email?token=${token}`
+    void this.email.send(email, 'Confirm your email', `
+      <p>Hi ${username},</p>
+      <p>Click the link below to confirm your email. It expires in 24 hours.</p>
+      <a href="${url}">${url}</a>
+    `)
+
+    return { message: 'Check your email to confirm your account' }
+  }
+
+  async confirmEmail(token: string) {
+    const user = await this.users.findByEmailConfirmToken(token)
+    if (!user || !user.emailConfirmTokenExpiry || user.emailConfirmTokenExpiry < new Date()) {
+      throw new BadRequestException('Invalid or expired token')
+    }
+    await this.users.confirmEmail(user.id)
+    return { message: 'Email confirmed' }
+  }
+
+  async forgotPassword(email: string) {
+    const user = await this.users.findByEmail(email)
+    if (!user) return { message: 'If this email exists, a reset link was sent' }
+
+    const token = randomBytes(32).toString('hex')
+    const expiry = new Date(Date.now() + 60 * 60 * 1000)
+    await this.users.setResetToken(user.id, token, expiry)
+
+    const url = `${process.env.APP_URL}/auth/reset-password?token=${token}`
+    void this.email.send(email, 'Reset your password', `
+      <p>Click the link below to reset your password. It expires in 1 hour.</p>
+      <a href="${url}">${url}</a>
+      <p>If you didn't request this, ignore this email.</p>
+    `)
+
+    return { message: 'If this email exists, a reset link was sent' }
+  }
+
+  async validateResetToken(token: string) {
+    const user = await this.users.findByResetToken(token)
+    if (!user || !user.resetPasswordTokenExpiry || user.resetPasswordTokenExpiry < new Date()) {
+      throw new BadRequestException('Invalid or expired token')
+    }
+    return { valid: true }
+  }
+
+  async resetPassword(token: string, password: string) {
+    const user = await this.users.findByResetToken(token)
+    if (!user || !user.resetPasswordTokenExpiry || user.resetPasswordTokenExpiry < new Date()) {
+      throw new BadRequestException('Invalid or expired token')
+    }
+    await this.users.updatePassword(user.id, this.hashPassword(password))
+    return { message: 'Password reset successfully' }
   }
 
   async login(email: string, password: string) {

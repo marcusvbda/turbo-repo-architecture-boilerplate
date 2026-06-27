@@ -9,7 +9,7 @@ import { User } from './users/user.entity'
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['../../.env.local', '.env.local', '.env'],
+      envFilePath: ['.env.local', '.env'],
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
