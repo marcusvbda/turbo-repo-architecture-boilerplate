@@ -14,12 +14,12 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const headerList = await headers()
-  const session = JSON.parse(headerList.get(`x-${process.env.SESSION_KEY}`) ?? '{}')
+  const user = JSON.parse(headerList.get(`x-${process.env.SESSION_KEY}-user`) ?? '{}')
 
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${mono.variable}`}>
       <body suppressHydrationWarning>
-        <Providers session={session}>
+        <Providers user={user}>
           <main>{children}</main>
         </Providers>
       </body>

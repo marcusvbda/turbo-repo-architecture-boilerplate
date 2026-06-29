@@ -4,8 +4,8 @@ import { createContext, ReactNode, useContext } from 'react'
 
 const AuthContext = createContext<any>({ user: null, token: null })
 
-export function AuthProvider({ session, children }: { session: any; children: ReactNode }) {
-  return <AuthContext.Provider value={session}>{children}</AuthContext.Provider>
+export function AuthProvider({ user, children }: { user: any; children: ReactNode }) {
+  return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

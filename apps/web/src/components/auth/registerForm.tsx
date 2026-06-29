@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { register } from '@/services/auth'
+import { registerAction } from '@/features/auth/register'
 import Link from 'next/link'
 
 const registerSchema = z
@@ -34,7 +34,7 @@ export default function RegisterForm() {
   } = useForm({ resolver: zodResolver(registerSchema) })
 
   const { mutate, isPending } = useMutation({
-    mutationFn: register,
+    mutationFn: registerAction,
     onSuccess: (res) => {
       if (!res.ok) return toast.error(res.message ?? 'Registration failed')
       toast.success('Check your email to confirm your account')

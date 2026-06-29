@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { login } from '@/services/auth'
+import { loginAction } from '@/features/auth/login'
 import Link from 'next/link'
 
 const loginSchema = z.object({
@@ -34,7 +34,7 @@ export default function LoginForm({ callbackUrl }: IProps) {
   })
 
   const { mutate, isPending } = useMutation({
-    mutationFn: login,
+    mutationFn: loginAction,
     onSuccess: (res: any) => {
       if (!res.ok) return toast.error(res.message ?? 'Invalid credentials')
       startTransition(() => {

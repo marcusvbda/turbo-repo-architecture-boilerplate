@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { getMe, refreshToken } from './services/auth'
+
+const API = process.env.API_URL!
 
 const redirectToLogin = (req: NextRequest) => {
-  const callbackUrl = req.nextUrl.pathname
   const url = req.nextUrl.clone()
   url.pathname = '/auth/signin'
-  url.searchParams.set('callbackUrl', callbackUrl)
+  url.searchParams.set('callbackUrl', req.nextUrl.pathname)
   return NextResponse.redirect(url)
 }
 
@@ -26,26 +26,35 @@ export default async function proxy(req: NextRequest) {
   }
 
   const session = req.cookies.get(sessionKey)?.value
-
   if (!session) return redirectToLogin(req)
 
   try {
     let { access_token } = JSON.parse(session) as { access_token: string }
-    let meRes = await getMe(access_token)
+
+    let meRes = await fetch(`${API}/auth/me`, {
+      headers: { Authorization: `Bearer ${access_token}` },
+    })
     let refreshed = false
 
     if (!meRes.ok) {
-      const refreshRes = await refreshToken(access_token)
+      const refreshRes = await fetch(`${API}/auth/refresh`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${access_token}`,
+        },
+      })
       if (!refreshRes.ok) return clearSession(req)
-
       access_token = ((await refreshRes.json()) as { access_token: string }).access_token
       refreshed = true
-      meRes = await getMe(access_token)
+      meRes = await fetch(`${API}/auth/me`, {
+        headers: { Authorization: `Bearer ${access_token}` },
+      })
     }
 
     const user = await meRes.json()
     const nextRes = NextResponse.next()
-    nextRes.headers.set(`x-${sessionKey}`, JSON.stringify({ user, token: access_token }))
+    nextRes.headers.set(`x-${sessionKey}-user`, JSON.stringify(user))
 
     if (refreshed) {
       nextRes.cookies.set(sessionKey, JSON.stringify({ access_token }), {
@@ -63,5 +72,5 @@ export default async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api/auth|static|_next|.well-known|_vercel|images|favicon).*)'],
+  matcher: ['/((?!static|_next|.well-known|_vercel|images|favicon).*)'],
 }

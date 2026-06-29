@@ -8,16 +8,18 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { resetPassword } from '@/services/auth'
+import { resetPasswordAction } from '@/features/auth/reset-password'
 import Link from 'next/link'
 
-const schema = z.object({
-  password: z.string().min(6),
-  confirmPassword: z.string().min(6),
-}).refine((d) => d.password === d.confirmPassword, {
-  message: 'Passwords do not match',
-  path: ['confirmPassword'],
-})
+const schema = z
+  .object({
+    password: z.string().min(6),
+    confirmPassword: z.string().min(6),
+  })
+  .refine((d) => d.password === d.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  })
 
 interface IProps {
   token: string
@@ -34,9 +36,9 @@ export default function ResetPasswordForm({ token }: IProps) {
   } = useForm({ resolver: zodResolver(schema) })
 
   const { mutate, isPending } = useMutation({
-    mutationFn: resetPassword,
+    mutationFn: resetPasswordAction,
     onSuccess: (res) => {
-      if (!res.ok) return toast.error(res.message ?? 'Invalid or expired token')
+      if (!res.ok) return toast.error(res.message ?? 'error')
       toast.success('Password updated! Sign in with your new password.')
       startTransition(() => router.push('/auth/signin'))
     },

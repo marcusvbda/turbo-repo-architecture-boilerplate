@@ -1,4 +1,9 @@
-import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from '@nestjs/common'
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { randomBytes, scryptSync, timingSafeEqual } from 'crypto'
 import { EmailService } from '../email/email.service'
@@ -24,11 +29,15 @@ export class AuthService {
     await this.users.setEmailConfirmToken(user.id, token, expiry)
 
     const url = `${process.env.APP_URL}/auth/confirm-email?token=${token}`
-    void this.email.send(email, 'Confirm your email', `
+    void this.email.send(
+      email,
+      'Confirm your email',
+      `
       <p>Hi ${username},</p>
       <p>Click the link below to confirm your email. It expires in 24 hours.</p>
       <a href="${url}">${url}</a>
-    `)
+    `,
+    )
 
     return { message: 'Check your email to confirm your account' }
   }
@@ -36,7 +45,7 @@ export class AuthService {
   async confirmEmail(token: string) {
     const user = await this.users.findByEmailConfirmToken(token)
     if (!user || !user.emailConfirmTokenExpiry || user.emailConfirmTokenExpiry < new Date()) {
-      throw new BadRequestException('Invalid or expired token')
+      throw new BadRequestException('error')
     }
     await this.users.confirmEmail(user.id)
     return { message: 'Email confirmed' }
@@ -51,11 +60,15 @@ export class AuthService {
     await this.users.setResetToken(user.id, token, expiry)
 
     const url = `${process.env.APP_URL}/auth/reset-password?token=${token}`
-    void this.email.send(email, 'Reset your password', `
+    void this.email.send(
+      email,
+      'Reset your password',
+      `
       <p>Click the link below to reset your password. It expires in 1 hour.</p>
       <a href="${url}">${url}</a>
       <p>If you didn't request this, ignore this email.</p>
-    `)
+    `,
+    )
 
     return { message: 'If this email exists, a reset link was sent' }
   }
@@ -63,7 +76,7 @@ export class AuthService {
   async validateResetToken(token: string) {
     const user = await this.users.findByResetToken(token)
     if (!user || !user.resetPasswordTokenExpiry || user.resetPasswordTokenExpiry < new Date()) {
-      throw new BadRequestException('Invalid or expired token')
+      throw new BadRequestException('error')
     }
     return { valid: true }
   }
@@ -71,7 +84,7 @@ export class AuthService {
   async resetPassword(token: string, password: string) {
     const user = await this.users.findByResetToken(token)
     if (!user || !user.resetPasswordTokenExpiry || user.resetPasswordTokenExpiry < new Date()) {
-      throw new BadRequestException('Invalid or expired token')
+      throw new BadRequestException('error')
     }
     await this.users.updatePassword(user.id, this.hashPassword(password))
     return { message: 'Password reset successfully' }

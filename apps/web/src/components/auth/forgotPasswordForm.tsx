@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { useMutation } from '@tanstack/react-query'
-import { forgotPassword } from '@/services/auth'
+import { forgotPasswordAction } from '@/features/auth/forgot-password'
 import Link from 'next/link'
 
 const schema = z.object({ email: z.string().email() })
@@ -19,7 +19,7 @@ export default function ForgotPasswordForm() {
   } = useForm({ resolver: zodResolver(schema) })
 
   const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: forgotPassword,
+    mutationFn: forgotPasswordAction,
     onSuccess: (res) => {
       if (!res.ok) return toast.error(res.message ?? 'Something went wrong')
     },

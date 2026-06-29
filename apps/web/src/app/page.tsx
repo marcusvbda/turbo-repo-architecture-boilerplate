@@ -4,7 +4,7 @@ import Tag from '@/components/ui/tag'
 import { useAuth } from '@/contexts/auth'
 
 export default function HomePage() {
-  const { user } = useAuth()
+  const user = useAuth()
 
   return (
     <main>

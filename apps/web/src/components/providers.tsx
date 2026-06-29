@@ -6,16 +6,16 @@ import { Toaster } from 'sonner'
 import { AuthProvider } from '@/contexts/auth'
 
 type ProvidersProps = {
-  session: any
+  user: any
   children: ReactNode
 }
 
-export function Providers({ session, children }: ProvidersProps) {
+export function Providers({ user, children }: ProvidersProps) {
   const [client] = useState(() => new QueryClient())
 
   return (
     <QueryClientProvider client={client}>
-      <AuthProvider session={session}>
+      <AuthProvider user={user}>
         {children}
         <Toaster richColors />
       </AuthProvider>

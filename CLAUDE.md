@@ -18,8 +18,8 @@ turbo-repo-architecture-boilerplate/
 **Web** (`apps/web/src/`):
 
 - `app/` — Next.js App Router pages and layouts
+- `features/<name>/actions.ts` — server actions per feature (SDD pattern)
 - `components/ui/` — reusable UI components
-- `services/` — API client functions (plain `fetch`)
 - `libs/utils.ts` — `cn()` helper (clsx + tailwind-merge)
 - `proxy.ts` — Next.js middleware for auth / session refresh
 
@@ -146,11 +146,45 @@ type FormData = z.infer<typeof schema>
 
 - Validate request bodies with class-validator DTOs, not manual checks in controllers or services
 
+# Architecture Patterns
+
+## Server-Driven Design (SDD)
+
+- **Feature folder:** all server-side logic lives in `features/<feature>/actions.ts` with `'use server'`
+- **No Next.js API routes** for internal operations — use server actions instead
+- Server actions call the NestJS backend directly using the private `API_URL` env var
+- Client components import actions and call them via `useMutation` — never `fetch` the backend directly from the browser
+- `NEXT_PUBLIC_*` env vars must never hold secrets or tokens
+
+## Security
+
+- **JWT never reaches the browser:** access tokens are stored only in httpOnly cookies (set by server actions or middleware) and read only in server-side code
+- **No credentials in source code:** every secret (JWT secret, DB URL, API keys) lives in `.env` which is gitignored
+- **Always maintain `.env.example`** with realistic but mocked/placeholder values for every key in `.env` — this is the contract for new developers
+- Never log, print, or return tokens/passwords in responses
+
 # Key Decisions / Constraints
 
 - All text in docs, variable names, file names, database table/column names, and CSS classes must be in English — no Portuguese
 - Password hashing uses native `crypto.scrypt` — do not replace with bcrypt or argon2
 - JWT logout is implemented via `tokenVersion` on the user entity — incrementing it invalidates all existing tokens
+
+# Agentic Workflow
+
+## Subagent preference
+
+- When executing multi-step implementation plans, always prefer **subagent-driven development**: dispatch a fresh implementer subagent per task, review between tasks, final whole-branch review at the end
+- Use the `superpowers:subagent-driven-development` skill
+
+## Cleanup after plan execution
+
+After all tasks in a plan are complete, delete the temporary files that were created during execution:
+
+- `.superpowers/sdd/task-N-brief.md` and `.superpowers/sdd/task-N-report.md` for each task N
+- `.superpowers/sdd/progress.md`
+- `docs/superpowers/plans/<plan-file>.md`
+
+This keeps the repo clean — plan and task files are ephemeral scaffolding, not permanent documentation.
 
 # What NOT to Do
 
@@ -161,3 +195,5 @@ type FormData = z.infer<typeof schema>
 - Do not add `useMemo`/`useCallback` preemptively — measure first
 - Do not bypass the Zod schema to cast types manually (no `as FormData`)
 - Do not inline auth logic in controllers — always use guards
+- Do not put secrets or tokens in source code — always `.env` + `.env.example`
+- Do not expose JWT tokens to client-side JavaScript — httpOnly cookies only

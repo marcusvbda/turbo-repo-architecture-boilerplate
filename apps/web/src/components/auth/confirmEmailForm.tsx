@@ -5,7 +5,7 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { useTransition, useEffect } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { confirmEmail } from '@/services/auth'
+import { confirmEmailAction } from '@/features/auth/confirm-email'
 import Link from 'next/link'
 
 interface IProps {
@@ -17,9 +17,9 @@ export default function ConfirmEmailForm({ token }: IProps) {
   const [isRedirecting, startTransition] = useTransition()
 
   const { mutate, isPending, status } = useMutation({
-    mutationFn: confirmEmail,
+    mutationFn: confirmEmailAction,
     onSuccess: (res) => {
-      if (!res.ok) return toast.error(res.message ?? 'Invalid or expired token')
+      if (!res.ok) return toast.error(res.message ?? 'error')
       toast.success('Email confirmed! You can now sign in.')
       startTransition(() => router.push('/auth/signin'))
     },
