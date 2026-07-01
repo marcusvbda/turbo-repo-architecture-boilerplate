@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
 @theme {
+  /* Palette */
   --color-bg: #0a0a0f;
   --color-surface: #111118;
   --color-surface2: #1a1a24;
@@ -11,9 +12,17 @@
   --color-yellow: #ffb830;
   --color-text: #e8e8f0;
   --color-muted: #7a7a9a;
+  --color-dim: #4a4a6a;
 
+  /* Typography */
   --font-sans: var(--font-inter), sans-serif;
-  --font-mono: var(--font-mono), monospace;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+
+  /* Radii */
+  --radius-tag: 4px;
+  --radius-field: 6px;
+  --radius-card: 10px;
+  --radius-panel: 12px;
 
   --spacing: 2px;
 }
@@ -31,5 +40,9 @@
     font-family: var(--font-sans);
     font-size: 14px;
     line-height: 1.7;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-accent) 40%, transparent);
   }
 }

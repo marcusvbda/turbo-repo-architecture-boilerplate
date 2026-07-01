@@ -133,6 +133,10 @@ type FormData = z.infer<typeof schema>
 - Compose classes with the `cn()` helper from `@/libs/utils`
 - Variant-based props over runtime style objects
 
+### React types
+
+- Import React types explicitly: `import { ReactNode } from 'react'`. Never reference them via the `React.` namespace (no `React.ReactNode`, `React.FC`, etc.)
+
 ## API (`apps/api`)
 
 ### Module structure
@@ -197,3 +201,4 @@ This keeps the repo clean — plan and task files are ephemeral scaffolding, not
 - Do not inline auth logic in controllers — always use guards
 - Do not put secrets or tokens in source code — always `.env` + `.env.example`
 - Do not expose JWT tokens to client-side JavaScript — httpOnly cookies only
+- Do not use `React.ReactNode` or other `React.*` type references — import the type directly from `react` instead

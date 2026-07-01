@@ -1,6 +1,6 @@
 'use client'
 
-import Card from '@/components/ui/card'
+import AuthCard from '@/components/auth/authCard'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { useTransition, useEffect } from 'react'
@@ -33,33 +33,36 @@ export default function ConfirmEmailForm({ token }: IProps) {
   const confirmed = status === 'success'
 
   return (
-    <Card className="flex flex-col gap-2 m-4 w-full p-6 text-center">
-      <h1 className="text-3xl">
-        Confirm <span className="text-accent">Email</span>
-      </h1>
-
+    <AuthCard
+      eyebrow="Auth · Confirmation"
+      title={
+        <>
+          Confirm <span>Email</span>
+        </>
+      }
+    >
       {!token && (
-        <p className="text-muted py-4">
+        <p className="text-muted text-sm">
           No token provided. Check your email for the confirmation link.
         </p>
       )}
 
-      {token && isPending && <p className="text-muted py-4">Confirming your email…</p>}
+      {token && isPending && <p className="text-muted text-sm">Confirming your email…</p>}
 
       {token && !isPending && !confirmed && (
-        <p className="text-muted py-4">
+        <p className="text-muted text-sm">
           Token invalid or expired.{' '}
-          <Link href="/auth/signin" className="text-accent">
+          <Link href="/auth/signin" className="text-accent hover:underline">
             Go to sign in
           </Link>
         </p>
       )}
 
       {confirmed && (
-        <p className="text-muted py-4">
+        <p className="text-muted text-sm">
           {isRedirecting ? 'Redirecting to sign in…' : 'Email confirmed!'}
         </p>
       )}
-    </Card>
+    </AuthCard>
   )
 }

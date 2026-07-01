@@ -1,6 +1,9 @@
 'use client'
 
-import Card from '@/components/ui/card'
+import AuthCard from '@/components/auth/authCard'
+import Button from '@/components/ui/button'
+import Field from '@/components/ui/field'
+import Input from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -28,56 +31,50 @@ export default function ForgotPasswordForm() {
 
   if (isSuccess) {
     return (
-      <Card className="flex flex-col gap-2 m-4 w-full p-6 text-center">
-        <h1 className="text-3xl">
-          Check your <span className="text-accent">email</span>
-        </h1>
-        <p className="text-muted py-4">
-          If that address is registered, we sent a reset link. Check your inbox.
-        </p>
-        <Link href="/auth/signin" className="text-accent text-sm">
+      <AuthCard
+        eyebrow="Auth · Recovery"
+        title={
+          <>
+            Check your <span>email</span>
+          </>
+        }
+        subtitle="If that address is registered, we sent a reset link. Check your inbox."
+      >
+        <Link href="/auth/signin" className="text-accent text-sm hover:underline">
           Back to sign in
         </Link>
-      </Card>
+      </AuthCard>
     )
   }
 
   return (
-    <Card className="flex flex-col gap-2 m-4 w-full p-6">
-      <h1 className="text-3xl">
-        Forgot <span className="text-accent">Password</span>
-      </h1>
-      <p className="text-muted pb-5">Enter your email and we&apos;ll send a reset link.</p>
-      <hr className="opacity-10 pt-5" />
+    <AuthCard
+      eyebrow="Auth · Recovery"
+      title={
+        <>
+          Forgot <span>Password</span>
+        </>
+      }
+      subtitle="Enter your email and we'll send a reset link."
+    >
       <form
         onSubmit={handleSubmit((data: any) => mutate(data))}
-        className="w-full flex flex-col gap-4"
+        className="w-full flex flex-col gap-8"
       >
-        <div className="flex flex-col">
-          <label>Email</label>
-          <input
-            {...register('email')}
-            type="email"
-            placeholder="you@company.com"
-            className="border p-4 border-gray-100/20 rounded-sm"
-          />
-          {errors.email && <span className="text-xs text-warn">{errors.email.message}</span>}
-        </div>
+        <Field label="Email" error={errors.email?.message}>
+          <Input {...register('email')} type="email" placeholder="you@company.com" />
+        </Field>
 
-        <button
-          type="submit"
-          disabled={isPending}
-          className="border p-4 border-gray-100/20 rounded-sm bg-accent text-white my-4"
-        >
+        <Button type="submit" disabled={isPending} className="my-4">
           {isPending ? 'Sending…' : 'Send reset link'}
-        </button>
+        </Button>
       </form>
 
-      <p className="text-sm text-center text-muted">
-        <Link href="/auth/signin" className="text-accent">
+      <p className="text-sm text-center">
+        <Link href="/auth/signin" className="text-accent hover:underline">
           Back to sign in
         </Link>
       </p>
-    </Card>
+    </AuthCard>
   )
 }

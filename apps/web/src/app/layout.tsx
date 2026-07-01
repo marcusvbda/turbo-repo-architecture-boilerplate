@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import './style.css'
 import { headers } from 'next/headers'
+import { ReactNode } from 'react'
 import { Providers } from '@/components/providers'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   description: 'Next.js app',
 }
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
   const headerList = await headers()
   const user = JSON.parse(headerList.get(`x-${process.env.SESSION_KEY}-user`) ?? '{}')
 

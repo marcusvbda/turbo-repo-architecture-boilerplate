@@ -1,6 +1,9 @@
 'use client'
 
-import Card from '@/components/ui/card'
+import AuthCard from '@/components/auth/authCard'
+import Button from '@/components/ui/button'
+import Field from '@/components/ui/field'
+import Input from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -46,56 +49,40 @@ export default function LoginForm({ callbackUrl }: IProps) {
   })
 
   return (
-    <Card className="flex flex-col gap-2 m-4 w-full p-6">
-      <h1 className="text-3xl">
-        System <span className="text-accent">Login</span>
-      </h1>
-      <p className="text-muted pb-5">
-        Fill the form below with your credentials to access the system.
-      </p>
-      <hr className="opacity-10 pt-5" />
+    <AuthCard
+      eyebrow="Auth · Sign in"
+      title={
+        <>
+          System <span>Login</span>
+        </>
+      }
+      subtitle="Fill the form below with your credentials to access the system."
+    >
       <form
         onSubmit={handleSubmit((data: any) => mutate(data))}
-        className="w-full flex flex-col gap-4"
+        className="w-full flex flex-col gap-8"
       >
-        <div className="flex flex-col">
-          <label>Email</label>
-          <input
-            {...register('email')}
-            type="email"
-            placeholder="you@company.com"
-            className="border p-4 border-gray-100/20 rounded-sm"
-          />
-          {errors.email && <span className="text-xs text-warn">{errors.email.message}</span>}
-        </div>
+        <Field label="Email" error={errors.email?.message}>
+          <Input {...register('email')} type="email" placeholder="you@company.com" />
+        </Field>
 
-        <div className="flex flex-col">
-          <label>Password</label>
-          <input
-            {...register('password')}
-            type="password"
-            className="border p-4 border-gray-100/20 rounded-sm"
-          />
-          {errors.password && <span className="text-xs text-warn">{errors.password.message}</span>}
-        </div>
+        <Field label="Password" error={errors.password?.message}>
+          <Input {...register('password')} type="password" placeholder="••••••••" />
+        </Field>
 
-        <button
-          type="submit"
-          disabled={isPending || isRedirecting}
-          className="border p-4 border-gray-100/20 rounded-sm bg-accent text-white my-4"
-        >
+        <Button type="submit" disabled={isPending || isRedirecting} className="my-4">
           {isPending ? 'Signing in…' : isRedirecting ? 'Redirecting…' : 'Sign in'}
-        </button>
+        </Button>
       </form>
 
-      <div className="flex justify-between text-sm text-muted">
-        <Link href="/auth/register" className="text-accent">
+      <div className="flex justify-between text-sm">
+        <Link href="/auth/register" className="text-accent hover:underline">
           Create account
         </Link>
-        <Link href="/auth/forgot-password" className="text-accent">
+        <Link href="/auth/forgot-password" className="text-accent hover:underline">
           Forgot password?
         </Link>
       </div>
-    </Card>
+    </AuthCard>
   )
 }

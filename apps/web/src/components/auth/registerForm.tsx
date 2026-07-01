@@ -1,6 +1,9 @@
 'use client'
 
-import Card from '@/components/ui/card'
+import AuthCard from '@/components/auth/authCard'
+import Button from '@/components/ui/button'
+import Field from '@/components/ui/field'
+import Input from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -44,75 +47,46 @@ export default function RegisterForm() {
   })
 
   return (
-    <Card className="flex flex-col gap-2 m-4 w-full p-6">
-      <h1 className="text-3xl">
-        Create <span className="text-accent">Account</span>
-      </h1>
-      <p className="text-muted pb-5">Fill the form below to create your account.</p>
-      <hr className="opacity-10 pt-5" />
+    <AuthCard
+      eyebrow="Auth · Register"
+      title={
+        <>
+          Create <span>Account</span>
+        </>
+      }
+      subtitle="Fill the form below to create your account."
+    >
       <form
         onSubmit={handleSubmit(({ confirmPassword: _, ...data }: any) => mutate(data))}
-        className="w-full flex flex-col gap-4"
+        className="w-full flex flex-col gap-8"
       >
-        <div className="flex flex-col">
-          <label>Username</label>
-          <input
-            {...field('username')}
-            type="text"
-            placeholder="johndoe"
-            className="border p-4 border-gray-100/20 rounded-sm"
-          />
-          {errors.username && <span className="text-xs text-warn">{errors.username.message}</span>}
-        </div>
+        <Field label="Username" error={errors.username?.message}>
+          <Input {...field('username')} type="text" placeholder="johndoe" />
+        </Field>
 
-        <div className="flex flex-col">
-          <label>Email</label>
-          <input
-            {...field('email')}
-            type="email"
-            placeholder="you@company.com"
-            className="border p-4 border-gray-100/20 rounded-sm"
-          />
-          {errors.email && <span className="text-xs text-warn">{errors.email.message}</span>}
-        </div>
+        <Field label="Email" error={errors.email?.message}>
+          <Input {...field('email')} type="email" placeholder="you@company.com" />
+        </Field>
 
-        <div className="flex flex-col">
-          <label>Password</label>
-          <input
-            {...field('password')}
-            type="password"
-            className="border p-4 border-gray-100/20 rounded-sm"
-          />
-          {errors.password && <span className="text-xs text-warn">{errors.password.message}</span>}
-        </div>
+        <Field label="Password" error={errors.password?.message}>
+          <Input {...field('password')} type="password" placeholder="••••••••" />
+        </Field>
 
-        <div className="flex flex-col">
-          <label>Confirm Password</label>
-          <input
-            {...field('confirmPassword')}
-            type="password"
-            className="border p-4 border-gray-100/20 rounded-sm"
-          />
-          {errors.confirmPassword && (
-            <span className="text-xs text-warn">{errors.confirmPassword.message}</span>
-          )}
-        </div>
+        <Field label="Confirm Password" error={errors.confirmPassword?.message}>
+          <Input {...field('confirmPassword')} type="password" placeholder="••••••••" />
+        </Field>
 
-        <button
-          type="submit"
-          disabled={isPending || isRedirecting}
-          className="border p-4 border-gray-100/20 rounded-sm bg-accent text-white my-4"
-        >
+        <Button type="submit" disabled={isPending || isRedirecting} className="my-4">
           {isPending ? 'Creating account…' : isRedirecting ? 'Redirecting…' : 'Create account'}
-        </button>
+        </Button>
       </form>
 
       <p className="text-sm text-center text-muted">
         Already have an account?{' '}
-        <Link href="/auth/signin" className="text-accent">
+        <Link href="/auth/signin" className="text-accent hover:underline">
           Sign in
         </Link>
       </p>
-    </Card>
+    </AuthCard>
   )
 }

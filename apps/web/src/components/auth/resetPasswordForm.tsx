@@ -1,6 +1,9 @@
 'use client'
 
-import Card from '@/components/ui/card'
+import AuthCard from '@/components/auth/authCard'
+import Button from '@/components/ui/button'
+import Field from '@/components/ui/field'
+import Input from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -47,58 +50,48 @@ export default function ResetPasswordForm({ token }: IProps) {
 
   if (!token) {
     return (
-      <Card className="flex flex-col gap-2 m-4 w-full p-6 text-center">
-        <p className="text-muted py-4">
-          Invalid reset link.{' '}
-          <Link href="/auth/forgot-password" className="text-accent">
-            Request a new one
-          </Link>
-        </p>
-      </Card>
+      <AuthCard
+        eyebrow="Auth · Recovery"
+        title={
+          <>
+            Invalid <span>link</span>
+          </>
+        }
+        subtitle="This reset link is invalid or has expired."
+      >
+        <Link href="/auth/forgot-password" className="text-accent text-sm hover:underline">
+          Request a new one
+        </Link>
+      </AuthCard>
     )
   }
 
   return (
-    <Card className="flex flex-col gap-2 m-4 w-full p-6">
-      <h1 className="text-3xl">
-        Reset <span className="text-accent">Password</span>
-      </h1>
-      <p className="text-muted pb-5">Enter your new password below.</p>
-      <hr className="opacity-10 pt-5" />
+    <AuthCard
+      eyebrow="Auth · Recovery"
+      title={
+        <>
+          Reset <span>Password</span>
+        </>
+      }
+      subtitle="Enter your new password below."
+    >
       <form
         onSubmit={handleSubmit((data: any) => mutate({ token, password: data.password }))}
-        className="w-full flex flex-col gap-4"
+        className="w-full flex flex-col gap-8"
       >
-        <div className="flex flex-col">
-          <label>New Password</label>
-          <input
-            {...register('password')}
-            type="password"
-            className="border p-4 border-gray-100/20 rounded-sm"
-          />
-          {errors.password && <span className="text-xs text-warn">{errors.password.message}</span>}
-        </div>
+        <Field label="New Password" error={errors.password?.message}>
+          <Input {...register('password')} type="password" placeholder="••••••••" />
+        </Field>
 
-        <div className="flex flex-col">
-          <label>Confirm Password</label>
-          <input
-            {...register('confirmPassword')}
-            type="password"
-            className="border p-4 border-gray-100/20 rounded-sm"
-          />
-          {errors.confirmPassword && (
-            <span className="text-xs text-warn">{errors.confirmPassword.message}</span>
-          )}
-        </div>
+        <Field label="Confirm Password" error={errors.confirmPassword?.message}>
+          <Input {...register('confirmPassword')} type="password" placeholder="••••••••" />
+        </Field>
 
-        <button
-          type="submit"
-          disabled={isPending || isRedirecting}
-          className="border p-4 border-gray-100/20 rounded-sm bg-accent text-white my-4"
-        >
+        <Button type="submit" disabled={isPending || isRedirecting} className="my-4">
           {isPending ? 'Updating…' : isRedirecting ? 'Redirecting…' : 'Update password'}
-        </button>
+        </Button>
       </form>
-    </Card>
+    </AuthCard>
   )
 }

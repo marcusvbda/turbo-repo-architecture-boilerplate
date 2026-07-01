@@ -14,9 +14,5 @@ export default async function ResetPasswordPage({ searchParams }: Props) {
 
   if (!res.ok) redirect('/auth/forgot-password')
 
-  return (
-    <section className="flex self-center max-w-xl mx-auto py-20">
-      <ResetPasswordForm token={token} />
-    </section>
-  )
+  return <ResetPasswordForm token={token} />
 }
