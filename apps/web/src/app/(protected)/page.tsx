@@ -1,6 +1,5 @@
 'use client'
 
-import WelcomePanel from '@/components/home/welcomePanel'
 import Workspace from '@/components/layout/workspace'
 import CommandBar from '@/components/ui/command-bar'
 import Divisor from '@/components/ui/divisor'
@@ -10,16 +9,31 @@ import { toast } from 'sonner'
 import Card from '@/components/ui/card'
 import SectionLabel from '@/components/ui/section-label'
 import Stat from '@/components/ui/stat'
+import Sidebar from '@/components/layout/sidebar'
+import { SidebarItem } from '@/components/ui/raw-sidebar'
 
 export default function HomePage() {
   const router = useRouter()
 
   return (
     <Workspace
-      aside={<WelcomePanel />}
+      aside={<Sidebar />}
       kpis={
         <>
           <SectionLabel>Overview</SectionLabel>
+          <div className="flex flex-col gap-4">
+            <p className="relative mb-10 text-base text-muted leading-relaxed">
+              Organize your content.
+              <br />
+              Create incredible experiences.
+            </p>
+            <SidebarItem
+              icon={<span aria-hidden className="size-20 rounded-full border border-accent" />}
+              label="Need help ?"
+              description="Ask anything"
+              onClick={() => toast.success('Help')}
+            />
+          </div>
           <Card className="px-10 py-4">
             <Stat label="Visitors" value="12,430" delta="↑ 12.5%" />
             <Stat label="Pageviews" value="28,721" delta="↑ 8.2%" />
@@ -45,7 +59,7 @@ export default function HomePage() {
         </>
       }
     >
-      <div className="flex flex-col gap-24">
+      <div className="flex flex-col">
         <SectionLabel>Dashboard</SectionLabel>
         <OrbitMenu
           items={[
@@ -74,7 +88,7 @@ export default function HomePage() {
           ]}
         />
 
-        <div className="mx-auto flex w-full max-w-360 flex-col items-center gap-13 text-center">
+        <div className="mx-auto flex w-full max-w-360 flex-col items-center gap-13 text-center py-24">
           <Divisor className="my-10" />
           <h2 className="text-4xl font-light text-text tracking-normal">
             O que você quer fazer hoje?

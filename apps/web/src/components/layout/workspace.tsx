@@ -21,16 +21,20 @@ export default function Workspace({ aside, kpis, children }: IWorkspaceProps) {
         className={cn(
           'w-full px-12 grid gap-16 grid-cols-1 flex-1 lg:min-h-0',
           kpis
-            ? 'lg:grid-cols-[240px_minmax(0,1fr)_280px] xl:grid-cols-[280px_minmax(0,1fr)_320px]'
-            : 'lg:grid-cols-[280px_minmax(0,1fr)]',
+            ? 'lg:grid-cols-[300px_minmax(0,1fr)_300px] xl:grid-cols-[350px_minmax(0,1fr)_350px]'
+            : 'lg:grid-cols-[350px_minmax(0,1fr)]',
         )}
       >
-        <aside className="flex flex-col gap-12 py-16 lg:min-h-0 lg:overflow-y-auto">{aside}</aside>
-        <main className="flex flex-col gap-16 pb-16 min-w-0 lg:min-h-0 lg:overflow-y-auto ">
+        <aside className="flex flex-col gap-12 pb-16 lg:min-h-0 lg:overflow-y-auto scroll-subtle">
+          {aside}
+        </aside>
+        <main className="flex flex-col gap-16 pb-16 min-w-0 lg:min-h-0 lg:overflow-y-auto scroll-subtle">
           {children}
         </main>
         {kpis && (
-          <aside className="flex flex-col gap-12 pb-16 lg:min-h-0 lg:overflow-y-auto">{kpis}</aside>
+          <aside className="flex flex-col gap-12 pb-16 lg:min-h-0 lg:overflow-y-auto scroll-subtle">
+            {kpis}
+          </aside>
         )}
       </div>
 

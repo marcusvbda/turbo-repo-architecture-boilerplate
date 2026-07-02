@@ -27,6 +27,17 @@
   --spacing: 2px;
 }
 
+@utility scroll-subtle {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.3s;
+
+  &:hover,
+  &:focus-within {
+    scrollbar-color: var(--color-border) transparent;
+  }
+}
+
 @layer base {
   * {
     margin: 0;
