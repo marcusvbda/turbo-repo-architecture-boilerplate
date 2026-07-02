@@ -28,16 +28,16 @@ export default function Sidebar() {
           active={isInHome}
         />
         <SidebarItem
-          label="Pages"
-          description="15 Pages, 3 Drafts"
-          onClick={() => router.push('/pages')}
-          active={pathname.startsWith('/pages')}
+          label="CMS"
+          description="Configure your website entities"
+          onClick={() => router.push('/cms')}
+          active={pathname.startsWith('/cms')}
         />
         <SidebarItem
-          label="Blog"
-          description="15 Blogs, 3 Drafts"
-          onClick={() => router.push('/blogs')}
-          active={pathname.startsWith('/blogs')}
+          label="Automation"
+          description="Automation tool integration an settings"
+          onClick={() => router.push('/automations')}
+          active={pathname.startsWith('/automations')}
         />
       </div>
     </RawSidebar>

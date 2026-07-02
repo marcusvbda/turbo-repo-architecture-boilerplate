@@ -61,35 +61,7 @@ export default function HomePage() {
     >
       <div className="flex flex-col">
         <SectionLabel>Dashboard</SectionLabel>
-        <OrbitMenu
-          items={[
-            {
-              icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M13 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9l-6-6z" />
-                  <path d="M13 3v6h6" />
-                </svg>
-              ),
-              label: 'Pages',
-              hint: '18 pages',
-              onSelect: () => router.push('/pages'),
-            },
-            {
-              icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                  <path d="M12 20h9" />
-                </svg>
-              ),
-              label: 'Blog',
-              hint: '42 posts',
-              onSelect: () => toast('Blog'),
-            },
-          ]}
-        />
-
-        <div className="mx-auto flex w-full max-w-360 flex-col items-center gap-13 text-center py-24">
-          <Divisor className="my-10" />
+        <div className="mx-auto flex w-full max-w-360 my-30 flex-col items-center gap-13 text-center py-24">
           <h2 className="text-4xl font-light text-text tracking-normal">
             O que você quer fazer hoje?
           </h2>

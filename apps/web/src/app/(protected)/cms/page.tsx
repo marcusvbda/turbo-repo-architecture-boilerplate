@@ -19,7 +19,7 @@ export default function PagesPage() {
                   <path d="M13 3v6h6" />
                 </svg>
               ),
-              label: 'Add new Page',
+              label: 'Pages',
             },
             {
               icon: (
@@ -28,7 +28,7 @@ export default function PagesPage() {
                   <path d="M13 3v6h6" />
                 </svg>
               ),
-              label: 'Only drafts',
+              label: 'Blogs',
             },
             {
               icon: (
@@ -37,7 +37,7 @@ export default function PagesPage() {
                   <path d="M13 3v6h6" />
                 </svg>
               ),
-              label: 'Only published',
+              label: 'SEO',
             },
           ]}
         />
