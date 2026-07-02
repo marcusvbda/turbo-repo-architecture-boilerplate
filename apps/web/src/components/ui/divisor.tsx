@@ -4,7 +4,7 @@ export default function Divisor({ className = '' }: { className?: string }) {
   return (
     <div
       className={cn(
-        'relative mt-10 h-px w-full max-w-320 bg-border/70 shadow-[0_0_24px_rgba(124,92,252,0.18)]',
+        'relative mt-10 h-px w-full bg-border/70 shadow-[0_0_24px_rgba(124,92,252,0.18)]',
         className,
       )}
     >

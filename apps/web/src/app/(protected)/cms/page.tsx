@@ -8,7 +8,7 @@ import Sidebar from '@/components/layout/sidebar'
 export default function PagesPage() {
   return (
     <Workspace aside={<Sidebar />}>
-      <div className="flex flex-col">
+      <div className="flex flex-col w-full">
         <SectionLabel>Pages</SectionLabel>
         <OrbitMenu
           items={[
