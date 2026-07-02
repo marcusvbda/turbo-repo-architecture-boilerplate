@@ -1,43 +1,33 @@
 'use client'
 
-import Workspace from '@/components/layout/workspace'
-import OrbitMenu from '@/components/ui/orbit-menu'
+import Workspace from '@/components/ui/workspace'
 import SectionLabel from '@/components/ui/section-label'
-import Sidebar from '@/components/layout/sidebar'
+import Sidebar from '@/components/ui/sidebar'
+import KpisExample from '@/components/mocks/kpis-example2'
+import PagesMenu from '@/components/cms/menu'
+import { toast } from 'sonner'
+import QuickAction from '@/components/ui/quick-action'
 
 export default function PagesPage() {
   return (
-    <Workspace aside={<Sidebar />}>
+    <Workspace aside={<Sidebar />} kpis={<KpisExample />}>
       <div className="flex flex-col w-full">
         <SectionLabel>Pages</SectionLabel>
-        <OrbitMenu
+        <PagesMenu />
+        <QuickAction
+          label="Quick actions"
           items={[
             {
-              icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M13 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9l-6-6z" />
-                  <path d="M13 3v6h6" />
-                </svg>
-              ),
-              label: 'Pages',
+              label: 'Create new page',
+              onClick: () => toast.success('Help'),
             },
             {
-              icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M13 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9l-6-6z" />
-                  <path d="M13 3v6h6" />
-                </svg>
-              ),
-              label: 'Blogs',
+              label: 'Create new blog post',
+              onClick: () => toast.success('Help'),
             },
             {
-              icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M13 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9l-6-6z" />
-                  <path d="M13 3v6h6" />
-                </svg>
-              ),
-              label: 'SEO',
+              label: 'See page drafs',
+              onClick: () => toast.success('Help'),
             },
           ]}
         />

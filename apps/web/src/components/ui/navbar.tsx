@@ -1,4 +1,4 @@
-import UserMenu from '@/components/layout/userMenu'
+import UserMenu from '@/components/ui/userMenu'
 import Link from 'next/link'
 import Logo from '../ui/logo'
 

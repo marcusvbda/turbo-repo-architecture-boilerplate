@@ -15,6 +15,8 @@ export interface IOrbitMenuItem {
   hint?: string
   /** Highlighted like the center item of the reference — accent ring + glow */
   featured?: boolean
+  /** Marks this item as the current page */
+  active?: boolean
   /** Shown in a popover on hover/focus */
   /** Called when the orb itself is clicked */
   onSelect?: () => void
@@ -47,14 +49,16 @@ export default function OrbitMenu({ items, className }: IOrbitMenuProps) {
               type="button"
               onClick={item.onSelect}
               aria-label={item.label}
+              aria-current={item.active ? 'page' : undefined}
               className={cn(
                 'flex items-center justify-center rounded-full border bg-surface2 text-text',
-                'transition-all duration-300 outline-none [&_svg]:size-11',
+                'transition-all duration-500 ease-out outline-none [&_svg]:size-11',
                 'hover:border-accent hover:text-white hover:-translate-y-2 hover:shadow-[0_0_44px_-6px_rgba(124,92,252,0.6)]',
                 'focus-visible:border-accent focus-visible:text-white focus-visible:shadow-[0_0_44px_-6px_rgba(124,92,252,0.6)]',
                 item.featured
                   ? 'size-40 border-accent/70 text-white shadow-[0_0_50px_-8px_rgba(124,92,252,0.55)] [&_svg]:size-13'
                   : 'size-32 border-border',
+                item.active && 'border-accent text-white shadow-[0_0_44px_-6px_rgba(124,92,252,0.6)]',
               )}
             >
               {item.icon}

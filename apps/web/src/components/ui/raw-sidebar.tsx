@@ -46,7 +46,7 @@ export const SidebarItem = ({
       onClick={onClick}
       type="button"
       className={cn(
-        'group w-full relative flex items-center gap-8 rounded-panel border border-border bg-surface/80 p-8 text-left transition-colors hover:border-accent/40 outline-none focus-visible:ring-2 focus-visible:ring-accent/40',
+        'group w-full relative flex items-center gap-8 rounded-panel border border-border bg-surface/80 p-8 text-left transition-colors duration-500 ease-out hover:border-accent/40 outline-none focus-visible:ring-2 focus-visible:ring-accent/40',
         active && 'border-accent/60 bg-surface2',
         className,
       )}
