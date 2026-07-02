@@ -25,16 +25,12 @@ export default function Workspace({ aside, kpis, children }: IWorkspaceProps) {
             : 'lg:grid-cols-[280px_minmax(0,1fr)]',
         )}
       >
-        <aside className="flex flex-col gap-12 py-16 order-1 lg:order-0 lg:min-h-0 lg:overflow-y-auto">
-          {aside}
-        </aside>
-        <main className="flex flex-col gap-16 py-16 min-w-0 order-0 lg:order-1 lg:min-h-0 lg:overflow-y-auto">
+        <aside className="flex flex-col gap-12 py-16 lg:min-h-0 lg:overflow-y-auto">{aside}</aside>
+        <main className="flex flex-col gap-16 pb-16 min-w-0 lg:min-h-0 lg:overflow-y-auto ">
           {children}
         </main>
         {kpis && (
-          <aside className="flex flex-col gap-12 py-16 order-2 lg:min-h-0 lg:overflow-y-auto">
-            {kpis}
-          </aside>
+          <aside className="flex flex-col gap-12 pb-16 lg:min-h-0 lg:overflow-y-auto">{kpis}</aside>
         )}
       </div>
 

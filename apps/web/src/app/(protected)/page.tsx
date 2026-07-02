@@ -1,61 +1,22 @@
 'use client'
 
+import WelcomePanel from '@/components/home/welcomePanel'
 import Workspace from '@/components/layout/workspace'
-import Button from '@/components/ui/button'
-import Callout from '@/components/ui/callout'
+import CommandBar from '@/components/ui/command-bar'
+import Divisor from '@/components/ui/divisor'
+import OrbitMenu from '@/components/ui/orbit-menu'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import Card from '@/components/ui/card'
-import Heading from '@/components/ui/heading'
 import SectionLabel from '@/components/ui/section-label'
 import Stat from '@/components/ui/stat'
-import Tag from '@/components/ui/tag'
-import { useAuth } from '@/contexts/auth'
-
-function greeting() {
-  const hour = new Date().getHours()
-  if (hour < 12) return 'Good morning'
-  if (hour < 18) return 'Good afternoon'
-  return 'Good evening'
-}
-
-const today = new Intl.DateTimeFormat('en-US', {
-  weekday: 'long',
-  month: 'long',
-  day: 'numeric',
-})
 
 export default function HomePage() {
-  const user = useAuth()
+  const router = useRouter()
 
   return (
     <Workspace
-      aside={
-        <>
-          <div className="flex flex-col gap-4" suppressHydrationWarning>
-            <span className="font-mono text-[11px] uppercase tracking-widest text-dim">
-              {greeting()},
-            </span>
-            <Heading className="text-4xl">
-              {user?.username}
-              <span>.</span>
-            </Heading>
-            <span className="font-mono text-[11px] text-muted">{today.format(new Date())}</span>
-          </div>
-
-          <p className="text-muted text-sm border-t border-border pt-8">
-            Organize your work. Everything in one place.
-          </p>
-
-          <Callout tone="success" label="All clear">
-            No pending alerts right now.
-          </Callout>
-
-          <div className="flex flex-col gap-4">
-            <SectionLabel>Shortcuts</SectionLabel>
-            <Button variant="secondary">New item</Button>
-            <Button variant="secondary">Settings</Button>
-          </div>
-        </>
-      }
+      aside={<WelcomePanel />}
       kpis={
         <>
           <SectionLabel>Overview</SectionLabel>
@@ -84,31 +45,53 @@ export default function HomePage() {
         </>
       }
     >
-      <div className="flex flex-col gap-8 text-center py-16">
-        <h2 className="text-2xl font-semibold text-white tracking-[-0.02em]">
-          What do you want to do today?
-        </h2>
-        <p className="text-muted text-sm">Pick an action below to get started.</p>
-      </div>
+      <div className="flex flex-col gap-24">
+        <SectionLabel>Dashboard</SectionLabel>
+        <OrbitMenu
+          items={[
+            {
+              icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M13 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9l-6-6z" />
+                  <path d="M13 3v6h6" />
+                </svg>
+              ),
+              label: 'Pages',
+              hint: '18 pages',
+              onSelect: () => router.push('/pages'),
+            },
+            {
+              icon: (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                  <path d="M12 20h9" />
+                </svg>
+              ),
+              label: 'Blog',
+              hint: '42 posts',
+              onSelect: () => toast('Blog'),
+            },
+          ]}
+        />
 
-      <SectionLabel>Action board</SectionLabel>
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
-        {[
-          ['Pages', '18 pages', 'accent'],
-          ['Blog', '42 posts', 'success'],
-          ['Media', '342 files', 'warning'],
-          ['Menus', '7 menus', 'neutral'],
-          ['Templates', '14 templates', 'accent'],
-          ['Users', '9 members', 'success'],
-        ].map(([title, count, tone]) => (
-          <Card
-            key={title}
-            className="p-10 flex flex-col gap-4 transition-colors hover:border-accent/40 cursor-pointer"
-          >
-            <h4 className="font-semibold text-white">{title}</h4>
-            <Tag tone={tone as 'accent'}>{count}</Tag>
-          </Card>
-        ))}
+        <div className="mx-auto flex w-full max-w-360 flex-col items-center gap-13 text-center">
+          <Divisor className="my-10" />
+          <h2 className="text-4xl font-light text-text tracking-normal">
+            O que você quer fazer hoje?
+          </h2>
+
+          <CommandBar
+            className="w-full text-left"
+            placeholder="Pergunte ou dê um comando..."
+            hint={
+              <>
+                Ex.: <span className="font-medium text-text">"Ver produtos cadastrados"</span> ou{' '}
+                <span className="font-medium text-text">"Criar nova página"</span>
+              </>
+            }
+            onSubmit={(command) => toast(command)}
+          />
+        </div>
       </div>
     </Workspace>
   )

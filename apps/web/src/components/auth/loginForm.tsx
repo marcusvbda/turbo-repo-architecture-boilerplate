@@ -50,7 +50,6 @@ export default function LoginForm({ callbackUrl }: IProps) {
 
   return (
     <AuthCard
-      eyebrow="Auth · Sign in"
       title={
         <>
           System <span>Login</span>

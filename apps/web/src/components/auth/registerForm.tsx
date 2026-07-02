@@ -48,7 +48,6 @@ export default function RegisterForm() {
 
   return (
     <AuthCard
-      eyebrow="Auth · Register"
       title={
         <>
           Create <span>Account</span>

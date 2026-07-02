@@ -32,7 +32,6 @@ export default function ForgotPasswordForm() {
   if (isSuccess) {
     return (
       <AuthCard
-        eyebrow="Auth · Recovery"
         title={
           <>
             Check your <span>email</span>
@@ -49,7 +48,6 @@ export default function ForgotPasswordForm() {
 
   return (
     <AuthCard
-      eyebrow="Auth · Recovery"
       title={
         <>
           Forgot <span>Password</span>

@@ -34,7 +34,6 @@ export default function ConfirmEmailForm({ token }: IProps) {
 
   return (
     <AuthCard
-      eyebrow="Auth · Confirmation"
       title={
         <>
           Confirm <span>Email</span>

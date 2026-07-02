@@ -51,7 +51,6 @@ export default function ResetPasswordForm({ token }: IProps) {
   if (!token) {
     return (
       <AuthCard
-        eyebrow="Auth · Recovery"
         title={
           <>
             Invalid <span>link</span>
@@ -68,7 +67,6 @@ export default function ResetPasswordForm({ token }: IProps) {
 
   return (
     <AuthCard
-      eyebrow="Auth · Recovery"
       title={
         <>
           Reset <span>Password</span>
