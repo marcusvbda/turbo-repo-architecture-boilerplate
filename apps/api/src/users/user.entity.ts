@@ -43,4 +43,10 @@ export class User {
 
   @Column({ default: 0 })
   tokenVersion!: number
+
+  @Column({ default: 0 })
+  failedLoginAttempts!: number
+
+  @Column({ nullable: true, type: 'timestamptz' })
+  lockedUntil!: Date | null
 }

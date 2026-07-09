@@ -2,6 +2,7 @@ import { UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import { AuthService } from './auth.service'
+import { EmailService } from '../email/email.service'
 import { UsersService } from '../users/users.service'
 
 const base = {
@@ -12,19 +13,22 @@ const base = {
   enabled: true,
   verifiedAt: new Date(),
   tokenVersion: 0,
+  failedLoginAttempts: 0,
+  lockedUntil: null,
 }
 
 describe('AuthService.login', () => {
   let service: AuthService
-  let users: { findByEmail: jest.Mock }
+  let users: { findByEmail: jest.Mock; setFailedLoginAttempts: jest.Mock }
 
   beforeEach(async () => {
-    users = { findByEmail: jest.fn() }
+    users = { findByEmail: jest.fn(), setFailedLoginAttempts: jest.fn() }
     const mod = await Test.createTestingModule({
       providers: [
         AuthService,
         { provide: JwtService, useValue: { sign: () => 'tok' } },
         { provide: UsersService, useValue: users },
+        { provide: EmailService, useValue: { send: jest.fn() } },
       ],
     }).compile()
     service = mod.get(AuthService)
@@ -54,5 +58,22 @@ describe('AuthService.login', () => {
     users.findByEmail.mockResolvedValue(base)
     const result = await service.login('a@b.com', 'correct')
     expect(result).toHaveProperty('access_token')
+  })
+
+  it('throws when account is locked', async () => {
+    users.findByEmail.mockResolvedValue({ ...base, lockedUntil: new Date(Date.now() + 60_000) })
+    await expect(service.login('a@b.com', 'correct')).rejects.toThrow(UnauthorizedException)
+  })
+
+  it('locks the account after reaching max failed attempts', async () => {
+    users.findByEmail.mockResolvedValue({ ...base, failedLoginAttempts: 4 })
+    await expect(service.login('a@b.com', 'wrong')).rejects.toThrow(UnauthorizedException)
+    expect(users.setFailedLoginAttempts).toHaveBeenCalledWith(1, 5, expect.any(Date))
+  })
+
+  it('resets failed attempts on successful login', async () => {
+    users.findByEmail.mockResolvedValue({ ...base, failedLoginAttempts: 2 })
+    await service.login('a@b.com', 'correct')
+    expect(users.setFailedLoginAttempts).toHaveBeenCalledWith(1, 0, null)
   })
 })

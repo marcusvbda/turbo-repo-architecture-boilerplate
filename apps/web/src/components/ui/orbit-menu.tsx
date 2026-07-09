@@ -58,7 +58,8 @@ export default function OrbitMenu({ items, className }: IOrbitMenuProps) {
                 item.featured
                   ? 'size-40 border-accent/70 text-white shadow-[0_0_50px_-8px_rgba(124,92,252,0.55)] [&_svg]:size-13'
                   : 'size-32 border-border',
-                item.active && 'border-accent text-white shadow-[0_0_44px_-6px_rgba(124,92,252,0.6)]',
+                item.active &&
+                  'border-accent text-white shadow-[0_0_44px_-6px_rgba(124,92,252,0.6)]',
               )}
             >
               {item.icon}

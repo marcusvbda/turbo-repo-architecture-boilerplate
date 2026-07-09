@@ -23,6 +23,10 @@ export class UsersService {
     return this.repo.increment({ id }, 'tokenVersion', 1)
   }
 
+  setFailedLoginAttempts(id: number, failedLoginAttempts: number, lockedUntil: Date | null) {
+    return this.repo.update(id, { failedLoginAttempts, lockedUntil })
+  }
+
   findByEmailConfirmToken(token: string) {
     return this.repo.findOne({ where: { emailConfirmToken: token } })
   }

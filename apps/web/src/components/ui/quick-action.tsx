@@ -17,7 +17,7 @@ export default function QuickAction({ className = '', label, items }: IProps) {
   return (
     <div
       className={cn(
-        'mx-auto flex w-full max-w-360 flex-col items-center gap-13 text-center py-42',
+        'mx-auto flex w-full max-w-360 flex-col items-center gap-13 text-center pb-22',
         className,
       )}
     >

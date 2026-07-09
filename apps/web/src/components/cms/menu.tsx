@@ -1,5 +1,6 @@
 import { usePathname, useRouter } from 'next/navigation'
 import OrbitMenu from '../ui/orbit-menu'
+import { cn } from '@/libs/utils'
 
 export default function PagesMenu({ className = '' }: { className?: string }) {
   const router = useRouter()
@@ -7,7 +8,7 @@ export default function PagesMenu({ className = '' }: { className?: string }) {
 
   return (
     <OrbitMenu
-      className={className}
+      className={cn(className, 'relative -top-17')}
       items={[
         {
           icon: (

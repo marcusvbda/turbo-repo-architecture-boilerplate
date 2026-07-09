@@ -12,6 +12,10 @@ import { UsersService } from '../users/users.service'
 
 @Injectable()
 export class AuthService {
+  // ponytail: fixed thresholds, add env config if these need to vary per environment
+  private static readonly MAX_LOGIN_ATTEMPTS = 5
+  private static readonly LOCKOUT_MS = 15 * 60 * 1000
+
   constructor(
     private readonly users: UsersService,
     private readonly jwt: JwtService,
@@ -95,8 +99,18 @@ export class AuthService {
     if (!user) throw new UnauthorizedException('Invalid credentials')
     if (!user.enabled) throw new UnauthorizedException('Account disabled')
     if (!user.verifiedAt) throw new UnauthorizedException('Account not verified')
+    if (user.lockedUntil && user.lockedUntil > new Date()) {
+      throw new UnauthorizedException('Account temporarily locked due to too many failed attempts')
+    }
     if (!this.checkPassword(password, user.password)) {
+      const attempts = user.failedLoginAttempts + 1
+      const lockedUntil =
+        attempts >= AuthService.MAX_LOGIN_ATTEMPTS ? new Date(Date.now() + AuthService.LOCKOUT_MS) : null
+      await this.users.setFailedLoginAttempts(user.id, attempts, lockedUntil)
       throw new UnauthorizedException('Invalid credentials')
+    }
+    if (user.failedLoginAttempts > 0 || user.lockedUntil) {
+      await this.users.setFailedLoginAttempts(user.id, 0, null)
     }
     return { access_token: this.sign(user) }
   }
